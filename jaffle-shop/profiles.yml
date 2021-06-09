@@ -1,0 +1,13 @@
+jaffle_shop:
+  target: prod
+  outputs:
+    prod:
+      type: bigquery
+      method: service-account
+      keyfile: /var/secrets/google/dbt-prod-service-account.json
+      project: dbt-tutorial-314920
+      dataset: dbt_prod
+      threads: 1
+      timeout_seconds: 300
+      location: US
+      priority: interactive
