@@ -4,7 +4,7 @@ jaffle_shop:
     prod:
       type: bigquery
       method: service-account
-      keyfile: /var/secrets/google/dbt-prod-service-account.json
+      keyfile: /Users/kennethning/dbt-tutorial-314920-74c34d1c46f0.json
       project: dbt-tutorial-314920
       dataset: dbt_prod
       threads: 1

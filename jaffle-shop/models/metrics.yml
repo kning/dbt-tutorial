@@ -1,0 +1,66 @@
+# models/marts/product/schema.yml
+
+version: 2
+
+models:
+ - name: taxi_trips
+
+metrics:
+  - name: count_trips
+    label: Count trips
+    model: ref('taxi_trips')
+    description: "The number of taxi trips in Chicago by time grain"
+
+    calculation_method: count
+    expression: taxi_id
+
+    timestamp: trip_start_timestamp
+    time_grains: [day, week, month, quarter, year]
+
+    dimensions:
+      - pickup_community_area
+
+  - name: count_cash_trips
+    label: Count trips
+    model: ref('taxi_trips')
+    description: "The number of taxi trips in Chicago by time grain for cash payments"
+
+    calculation_method: count
+    expression: taxi_id
+
+    timestamp: trip_start_timestamp
+    time_grains: [day, week, month, quarter, year]
+
+    dimensions:
+      - pickup_community_area
+
+    filters:
+        - field: payment_type
+          operator: '='
+          value: "'Cash'"
+
+  - name: sum_fare
+    label: Total trip fare
+    model: ref('taxi_trips')
+
+    calculation_method: sum
+    expression: fare
+
+    timestamp: trip_start_timestamp
+    time_grains: [day, week, month, quarter, year]
+
+    dimensions:
+      - pickup_community_area
+
+  - name: avg_fare_per_trip
+    label: Fares for a time period divided by number of trips
+
+    calculation_method: derived
+    expression: "{{metric('sum_fare')}} / {{metric('count_trips')}}"
+
+    timestamp: trip_start_timestamp
+    time_grains: [day, week, month, quarter, year]
+
+    dimensions:
+      - pickup_community_area
+
